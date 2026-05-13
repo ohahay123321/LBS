@@ -22,6 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production
+        if (config('app.env') === 'production') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Manually register the Brevo mail transport
         $this->app->make(MailManager::class)->extend('brevo', function () {
             $factory = new BrevoTransportFactory();
