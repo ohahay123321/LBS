@@ -70,7 +70,15 @@ class TwoFactorController extends Controller
             $secret
         );
 
-        return view('auth.two-factor-setup', compact('secret', 'qrCodeUrl'));
+        // Generate inline QR code SVG using bacon/bacon-qr-code (already installed)
+        $renderer = new \BaconQrCode\Renderer\ImageRenderer(
+            new \BaconQrCode\Renderer\RendererStyle\RendererStyle(200),
+            new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+        );
+        $writer = new \BaconQrCode\Writer($renderer);
+        $qrCodeInline = base64_encode($writer->writeString($qrCodeUrl));
+
+        return view('auth.two-factor-setup', compact('secret', 'qrCodeUrl', 'qrCodeInline'));
     }
 
     public function enable(Request $request)
