@@ -185,7 +185,7 @@
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                     </span>
-                    <input type="password" name="password" placeholder="Minimum 6 characters" required minlength="6">
+                    <input type="password" name="password" placeholder="Minimum 8 characters" required minlength="8">
                 </div>
             </div>
 

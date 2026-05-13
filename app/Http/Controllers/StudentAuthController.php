@@ -56,7 +56,7 @@ class StudentAuthController extends Controller
             'email'          => ['required', 'email', 'unique:users,email', 'regex:/^[^@]+@gmail\.com$/i'],
             'student_number' => 'nullable|string|max:50|unique:users,student_number',
             'name'           => 'nullable|string|max:100',
-            'password'       => 'required|min:8|confirmed',
+            'password'       => ['required', 'min:8', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'],
         ]);
 
         User::create([

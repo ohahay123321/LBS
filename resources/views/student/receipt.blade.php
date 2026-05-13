@@ -108,7 +108,7 @@
             @if($request->status == 'RETURNED' && $request->fine > 0)
             <div class="info-row">
                 <span class="label">Fine</span>
-                <span class="value" style="color: #ef4444;">${{ number_format($request->fine, 2) }} {{ $request->fine_paid ? '(Paid)' : '(Unpaid)' }}</span>
+                <span class="value" style="color: #ef4444;">₱{{ number_format($request->fine, 2) }} {{ $request->fine_paid ? '(Paid)' : '(Unpaid)' }}</span>
             </div>
             @endif
         </div>

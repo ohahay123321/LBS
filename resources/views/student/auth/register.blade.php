@@ -174,6 +174,7 @@
     </style>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
+<body>
     <div class="auth-card">
         <div class="auth-logo">
             <img src="{{ asset('imagess.png') }}" alt="Library System Logo">
@@ -191,7 +192,6 @@
 
         <form method="POST" action="{{ route('student.register.submit') }}" autocomplete="off">
             @csrf
-            <input type="hidden" name="action" value="register">
 
             <div class="input-group">
                 <div class="input-wrapper">

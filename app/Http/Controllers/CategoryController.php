@@ -25,6 +25,10 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        if ($category->books()->exists()) {
+            return back()->with('error', 'Cannot delete category: it has books assigned to it.');
+        }
+
         $category->delete();
 
         return back()->with('success', 'Category removed!');

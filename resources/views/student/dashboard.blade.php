@@ -194,8 +194,7 @@
                     @if($h->status == 'APPROVED')
                     <span style="color: var(--success); font-weight: 600;">Accepted on:</span> {{ $h->action_date }}<br>
                     <span style="color: var(--danger); font-weight: 600;">Return by:</span> {{ $h->return_date }}<br>
-                    <span style="color: var(--text-muted); font-size: 13px;">Approved by: {{ $h->admin->name ?? 'Unknown' }}</span><br>
-                    <span style="color: var(--text-muted); font-size: 13px;">{{ $h->student_name }} Approved by {{ $h->admin->name ?? 'Unknown' }}</span>
+                    <span style="color: var(--text-muted); font-size: 13px;">Approved by: {{ $h->admin->name ?? 'Unknown' }}</span>
                     @elseif($h->status == 'DENIED')
                     <span style="color: var(--danger); font-weight: 600;">Denied on:</span> {{ $h->action_date }}<br>
                     <span style="color: var(--text-muted); font-size: 13px;">Denied by: {{ $h->admin->name ?? 'Unknown' }}</span>

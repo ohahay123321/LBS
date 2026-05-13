@@ -23,14 +23,22 @@ class RequestController extends Controller
     public function approve($reqId)
     {
         $request = BookRequest::with('book')->findOrFail($reqId);
+        $book = Book::findOrFail($request->book_id);
+
+        if ($book->stock < 1) {
+            return back()->with('error', 'Cannot approve request: book is out of stock.');
+        }
+
         $request->update([
             'status'      => 'APPROVED',
             'action_date' => now(),
             'return_date' => now()->addDays(3),
             'approved_by' => Auth::guard('admin')->id(),
         ]);
-        Book::where('id', $request->book_id)->decrement('stock');
-        Book::where('id', $request->book_id)->update(['status' => 'BORROWED']);
+        $book->decrement('stock');
+        if ($book->fresh()->stock < 1) {
+            $book->update(['status' => 'BORROWED']);
+        }
 
         Log::create(['description' => 'Admin approved book request ID: ' . $reqId . ' for book: ' . ($request->book->title ?? $request->book_id)]);
 
@@ -67,7 +75,7 @@ class RequestController extends Controller
         $fine = 0;
         if ($request->return_date && now()->gt($request->return_date)) {
             $daysLate = (int) now()->diffInDays($request->return_date);
-            $fineRate = \App\Models\Config::get('fine_rate', 10);
+            $fineRate = (int) \App\Models\Config::get('fine_rate', 10);
             $fine = $daysLate * $fineRate;
         }
 

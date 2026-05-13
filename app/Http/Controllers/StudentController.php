@@ -28,7 +28,9 @@ class StudentController extends Controller
             $booksQuery->where('status', 'BORROWED');
         } elseif ($filter == 'outofstock') {
             $booksQuery->where(function ($q) {
-                $q->where('status', 'AVAILABLE')->where('stock', 0);
+                $q->where('status', 'BORROWED')->orWhere(function ($q2) {
+                    $q2->where('status', 'AVAILABLE')->where('stock', 0);
+                });
             });
         }
 

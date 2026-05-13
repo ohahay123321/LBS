@@ -50,7 +50,7 @@ class AdminController extends Controller
 
         // Chart data: Books by status
         $booksByStatus = [
-            'labels' => ['Available', 'Borrowed'],
+            'labels' => ['In Stock', 'Borrowed'],
             'data' => [
                 Book::where('status', 'AVAILABLE')->count(),
                 Book::where('status', 'BORROWED')->count(),
@@ -146,7 +146,7 @@ class AdminController extends Controller
         if (! Hash::check($request->current_password, $admin->password)) {
             return back()->with('error', 'Current password is incorrect.');
         }
-        $admin->update(['password' => bcrypt($request->password)]);
+        $admin->update(['password' => Hash::make($request->password)]);
         Log::create(['description' => 'Admin changed their password']);
 
         return back()->with('success', 'Password changed successfully!');

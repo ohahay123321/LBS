@@ -82,7 +82,7 @@ class AdminAuthController extends Controller
 
     public function verifyOtp(Request $request)
     {
-        $request->validate(['otp' => 'required|string|size:6']);
+        $request->validate(['otp' => 'required|digits:6']);
 
         $userId = session('otp:admin:user_id');
         if (! $userId) {
@@ -158,7 +158,7 @@ class AdminAuthController extends Controller
 
     public function forgot(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:users,email']);
+        $request->validate(['email' => 'required|email']);
 
         $user = User::where('email', $request->email)->where('role', 'ADMIN')->first();
 

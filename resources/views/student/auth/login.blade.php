@@ -163,7 +163,6 @@
 
         <form method="POST" action="{{ route('student.login.submit') }}" autocomplete="off">
             @csrf
-            <input type="hidden" name="action" value="login">
 
             <div class="input-group">
                 <div class="input-wrapper">
