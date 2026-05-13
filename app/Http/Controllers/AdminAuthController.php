@@ -145,7 +145,8 @@ class AdminAuthController extends Controller
             Mail::to($user->email)->send(new WelcomeMail($verifyLink));
             $message = 'Registration successful! Please check your email to verify your account.';
         } catch (\Exception $e) {
-            $message = 'Registration successful! But email could not be sent. Contact admin.';
+            \Illuminate\Support\Facades\Log::error('WelcomeMail failed: ' . $e->getMessage());
+            $message = 'Registration successful! But email could not be sent. Error: ' . $e->getMessage();
         }
 
         return redirect()->route('admin.login')->with('success', $message);
