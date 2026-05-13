@@ -138,7 +138,6 @@
             gap: 6px;
         }
     </style>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <div class="auth-card">
@@ -189,8 +188,6 @@
                     <input type="password" name="password" placeholder="Enter your password" required>
                 </div>
             </div>
-
-            <div class="g-recaptcha" data-sitekey="{{ config('recaptcha.site_key') }}" style="margin-bottom: 12px;"></div>
 
             <button type="submit" class="btn-auth">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

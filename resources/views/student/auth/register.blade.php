@@ -174,7 +174,6 @@
     </style>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
-<body>
     <div class="auth-card">
         <div class="auth-logo">
             <img src="{{ asset('imagess.png') }}" alt="Library System Logo">

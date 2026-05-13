@@ -44,6 +44,8 @@ Route::get('/student', function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [AdminAuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AdminAuthController::class, 'login'])->name('login.submit')->middleware('throttle:5,1');
+    Route::get('otp', [AdminAuthController::class, 'showOtp'])->name('otp');
+    Route::post('otp', [AdminAuthController::class, 'verifyOtp'])->name('otp.verify')->middleware('throttle:10,1');
     Route::get('register', [AdminAuthController::class, 'showRegister'])->name('register');
     Route::post('register', [AdminAuthController::class, 'register'])->name('register.submit');
     Route::get('forgot', [AdminAuthController::class, 'showForgot'])->name('forgot');

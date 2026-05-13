@@ -13,6 +13,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'student_number', 'email', 'password', 'role', 'phone', 'address', 'profile_image', 'email_verified',
         'verification_token', 'reset_token', 'reset_expires', 'google2fa_secret', 'google2fa_enabled',
+        'login_otp', 'login_otp_expires',
     ];
 
     protected $hidden = [

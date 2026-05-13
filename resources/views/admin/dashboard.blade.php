@@ -171,6 +171,10 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
             <span>System Logs</span>
         </a>
+        <a href="#" onclick="showTab('security'); return false;" class="nav-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Security</span>
+        </a>
         <form method="POST" action="{{ route('admin.logout') }}">
             @csrf
             <button type="submit" class="nav-btn logout">
@@ -468,6 +472,30 @@
                     <tr><td colspan="5" style="text-align:center; color: var(--text-muted);">No issued books.</td></tr>
                     @endforelse
                 </table>
+            </div>
+
+            <div id="security" class="tab-content">
+                <div class="breadcrumb"><strong>Security</strong><span>Home / Security</span></div>
+                <div class="profile-container">
+                    <div class="profile-right" style="grid-column: 1 / -1;">
+                        @if($admin->google2fa_enabled)
+                            <h3 class="section-title">Two-Factor Authentication (Enabled)</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Your account is protected with Google Authenticator.</p>
+                            <form method="POST" action="{{ route('2fa.disable') }}">
+                                @csrf
+                                <div class="input-group"><label>Enter your password to disable 2FA:</label><input type="password" name="password" required></div>
+                                <button type="submit" class="btn-danger">Disable 2FA</button>
+                            </form>
+                        @else
+                            <h3 class="section-title">Two-Factor Authentication</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 20px;">Add an extra layer of security to your account using Google Authenticator.</p>
+                            <a href="{{ route('2fa.setup') }}" class="btn-save" style="display: inline-flex; text-decoration: none;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                Setup 2FA
+                            </a>
+                        @endif
+                    </div>
+                </div>
             </div>
 
             <div id="fines" class="tab-content">

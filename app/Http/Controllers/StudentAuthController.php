@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Rules\ReCaptcha;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -54,19 +53,18 @@ class StudentAuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'email' => ['required', 'email', 'unique:users,email', 'regex:/^[^@]+@gmail\.com$/i'],
+            'email'          => ['required', 'email', 'unique:users,email', 'regex:/^[^@]+@gmail\.com$/i'],
             'student_number' => 'nullable|string|max:50|unique:users,student_number',
-            'name' => 'nullable|string|max:100',
-            'password' => 'required|min:8|confirmed',
-            'g-recaptcha-response' => ['required', new ReCaptcha],
+            'name'           => 'nullable|string|max:100',
+            'password'       => 'required|min:8|confirmed',
         ]);
 
         User::create([
-            'email' => $request->email,
+            'email'          => $request->email,
             'student_number' => $request->student_number,
-            'name' => $request->name ?: '',
-            'password' => Hash::make($request->password),
-            'role' => 'USER',
+            'name'           => $request->name ?: '',
+            'password'       => Hash::make($request->password),
+            'role'           => 'USER',
             'email_verified' => true,
         ]);
 
