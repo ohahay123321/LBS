@@ -15,7 +15,7 @@ class ReCaptcha implements ValidationRule
             return;
         }
 
-        $response = Http::withoutVerifying()->asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
             'secret' => config('recaptcha.secret_key'),
             'response' => $value,
             'remoteip' => request()->ip(),

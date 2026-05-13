@@ -24,12 +24,15 @@ class RequestController extends Controller
     {
         $request = BookRequest::with('book')->findOrFail($reqId);
         $request->update([
-            'status' => 'APPROVED',
+            'status'      => 'APPROVED',
             'action_date' => now(),
             'return_date' => now()->addDays(3),
             'approved_by' => Auth::guard('admin')->id(),
         ]);
+        Book::where('id', $request->book_id)->decrement('stock');
         Book::where('id', $request->book_id)->update(['status' => 'BORROWED']);
+
+        Log::create(['description' => 'Admin approved book request ID: ' . $reqId . ' for book: ' . ($request->book->title ?? $request->book_id)]);
 
         if ($request->user) {
             $request->user->notify(new RequestApproved($request));
@@ -42,10 +45,12 @@ class RequestController extends Controller
     {
         $request = BookRequest::with('book')->findOrFail($reqId);
         $request->update([
-            'status' => 'DENIED',
+            'status'      => 'DENIED',
             'action_date' => now(),
             'approved_by' => Auth::guard('admin')->id(),
         ]);
+
+        Log::create(['description' => 'Admin denied book request ID: ' . $reqId . ' for book: ' . ($request->book->title ?? $request->book_id)]);
 
         if ($request->user) {
             $request->user->notify(new RequestDenied($request));
@@ -67,12 +72,15 @@ class RequestController extends Controller
         }
 
         $request->update([
-            'status' => 'RETURNED',
+            'status'      => 'RETURNED',
             'action_date' => now(),
             'approved_by' => Auth::guard('admin')->id(),
-            'fine' => $fine,
+            'fine'        => $fine,
         ]);
+        Book::where('id', $request->book_id)->increment('stock');
         Book::where('id', $request->book_id)->update(['status' => 'AVAILABLE']);
+
+        Log::create(['description' => 'Admin marked book returned for request ID: ' . $reqId . ($fine > 0 ? ' | Fine: PHP ' . $fine : '')]);
 
         if ($request->user) {
             $request->user->notify(new BookReturned($request));

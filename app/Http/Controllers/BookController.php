@@ -65,9 +65,9 @@ class BookController extends Controller
     private function buildActionColumn($book)
     {
         $csrf = csrf_token();
-        $title = safe_addslashes($book->title);
-        $author = safe_addslashes($book->author ?? '');
-        $category = safe_addslashes($book->category);
+        $title    = htmlspecialchars($book->title ?? '', ENT_QUOTES, 'UTF-8');
+        $author   = htmlspecialchars($book->author ?? '', ENT_QUOTES, 'UTF-8');
+        $category = htmlspecialchars($book->category ?? '', ENT_QUOTES, 'UTF-8');
 
         $editBtn = '<button onclick="editBook(' . $book->id . ', \'' . $title . '\', \'' . $author . '\', \'' . $category . '\', ' . ($book->stock ?? 1) . ')" class="btn-info btn-sm" style="margin-right: 8px;">Edit</button>';
 
@@ -98,13 +98,13 @@ class BookController extends Controller
         }
 
         Book::create([
-            'isbn' => $request->isbn,
-            'title' => $request->title,
-            'author' => $request->author,
-            'stock' => $request->stock,
-            'category' => $request->category,
-            'image' => $imagePath,
-            'status' => 'AVAILABLE',
+            'isbn'     => $validated['isbn'],
+            'title'    => $validated['title'],
+            'author'   => $validated['author'],
+            'stock'    => $validated['stock'],
+            'category' => $validated['category'],
+            'image'    => $imagePath,
+            'status'   => 'AVAILABLE',
         ]);
 
         Log::create(['description' => 'Admin added book: '.$request->title]);

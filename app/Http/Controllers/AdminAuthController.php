@@ -160,7 +160,11 @@ class AdminAuthController extends Controller
     {
         $request->validate(['email' => 'required|email|exists:users,email']);
 
-        $user  = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->where('role', 'ADMIN')->first();
+
+        if (! $user) {
+            return back()->withErrors(['email' => 'No admin account found with that email.']);
+        }
         $token = bin2hex(random_bytes(32));
         $user->update(['reset_token' => $token, 'reset_expires' => now()->addHours(24)]);
 

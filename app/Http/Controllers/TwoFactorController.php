@@ -23,7 +23,7 @@ class TwoFactorController extends Controller
         $request->validate(['code' => 'required|string|size:6']);
 
         $userId = session('2fa:user:id');
-        $guard = session('2fa:guard');
+        $guard  = session('2fa:guard');
 
         if (! $userId || ! $guard) {
             return redirect()->route('admin.login');
@@ -31,12 +31,12 @@ class TwoFactorController extends Controller
 
         $user = User::find($userId);
         if (! $user || ! $user->google2fa_enabled || ! $user->google2fa_secret) {
-            return redirect()->route('admin.login');
+            $loginRoute = $guard === 'student' ? 'student.login' : 'admin.login';
+            return redirect()->route($loginRoute);
         }
 
         $google2fa = new Google2FA();
 
-        // Decrypt the stored secret before verifying
         if ($google2fa->verifyKey(decrypt($user->google2fa_secret), $request->code)) {
             session()->forget(['2fa:user:id', '2fa:guard']);
             Auth::guard($guard)->login($user);
