@@ -1,0 +1,54 @@
+[phases.setup]
+aptPkgs = [
+  # Build tools
+  "bison",
+  "re2c",
+  "autoconf",
+  "pkg-config",
+
+  # OpenSSL, cURL, zlib
+  "libssl-dev",
+  "libcurl4-openssl-dev",
+  "zlib1g-dev",
+
+  # Readline, gettext
+  "libreadline-dev",
+  "gettext",
+
+  # GD (with external-gd support)
+  "libgd-dev",
+  "libfreetype6-dev",
+  "libjpeg-dev",
+  "libpng-dev",
+  "libwebp-dev",
+  "libxpm-dev",
+
+  # intl (ICU)
+  "libicu-dev",
+
+  # mbstring (oniguruma)
+  "libonig-dev",
+
+  # zip
+  "libzip-dev",
+
+  # PostgreSQL
+  "libpq-dev",
+
+  # XML (for xmlrpc)
+  "libxml2-dev",
+
+  # SQLite
+  "libsqlite3-dev",
+
+  # GMP, Sodium, Argon2 (common PHP extras)
+  "libgmp-dev",
+  "libsodium-dev",
+  "libargon2-dev",
+
+  # Tidy (optional but commonly bundled)
+  "libtidy-dev",
+
+  # XSL
+  "libxslt1-dev"
+]
