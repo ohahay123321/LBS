@@ -7,7 +7,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TwoFactorController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Welcome page
@@ -111,6 +113,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
             return response()->json(['success' => true]);
         })->name('notifications.read-all');
     });
+});
+
+// Two-Factor Authentication Routes
+Route::middleware(['guest'])->group(function () {
+    Route::get('2fa/challenge', [TwoFactorController::class, 'showChallenge'])->name('2fa.challenge');
+    Route::post('2fa/verify', [TwoFactorController::class, 'verifyChallenge'])->name('2fa.verify');
+});
+
+// 2FA Setup (authenticated admin or student only)
+Route::middleware(['auth:admin,student'])->group(function () {
+    Route::get('2fa/setup', [TwoFactorController::class, 'showSetup'])->name('2fa.setup');
+    Route::post('2fa/enable', [TwoFactorController::class, 'enable'])->name('2fa.enable');
+    Route::post('2fa/disable', [TwoFactorController::class, 'disable'])->name('2fa.disable');
 });
 
 // Student Auth Routes

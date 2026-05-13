@@ -10,7 +10,7 @@ class Config extends Model
 
     protected $fillable = ['key', 'value'];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public static function get($key, $default = null)
     {

@@ -57,6 +57,12 @@ class StudentController extends Controller
 
     public function requestBook(Request $request)
     {
+        $request->validate([
+            'book_id' => 'required|integer|exists:books,id',
+            'student_name' => 'required|string|max:100',
+            'student_id_num' => 'required|string|max:50',
+        ]);
+
         $user = Auth::guard('student')->user();
 
         $existing = BookRequest::where('user_id', $user->id)

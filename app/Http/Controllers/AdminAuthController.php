@@ -33,7 +33,6 @@ class AdminAuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'g-recaptcha-response' => ['required', new ReCaptcha],
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -79,7 +78,6 @@ class AdminAuthController extends Controller
             'email' => 'required|email',
             'token' => 'required',
             'password' => 'required|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-            'g-recaptcha-response' => ['required', new ReCaptcha],
         ]);
 
         $user = User::where('email', $request->email)
@@ -105,7 +103,6 @@ class AdminAuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'g-recaptcha-response' => ['required', new ReCaptcha],
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -123,6 +120,13 @@ class AdminAuthController extends Controller
                 Auth::guard('admin')->logout();
 
                 return back()->withErrors(['email' => 'Email not verified. Please check your email.']);
+            }
+
+            if ($user->google2fa_enabled) {
+                Auth::guard('admin')->logout();
+                session()->put(['2fa:user:id' => $user->id, '2fa:guard' => 'admin']);
+
+                return redirect()->route('2fa.challenge');
             }
 
             Log::create(['description' => 'Admin logged in: '.$user->email]);

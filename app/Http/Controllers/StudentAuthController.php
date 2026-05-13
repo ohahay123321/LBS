@@ -25,7 +25,6 @@ class StudentAuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'g-recaptcha-response' => ['required', new ReCaptcha],
         ]);
 
         $credentials = $request->only('email', 'password');
@@ -39,6 +38,13 @@ class StudentAuthController extends Controller
                 return back()->withErrors(['email' => 'Invalid credentials or not a student.']);
             }
 
+            if ($user->google2fa_enabled) {
+                Auth::guard('student')->logout();
+                session()->put(['2fa:user:id' => $user->id, '2fa:guard' => 'student']);
+
+                return redirect()->route('2fa.challenge');
+            }
+
             return redirect()->route('student.dashboard');
         }
 
@@ -48,7 +54,7 @@ class StudentAuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|unique:users,email|ends_with:@gmail.com',
+            'email' => ['required', 'email', 'unique:users,email', 'regex:/^[^@]+@gmail\.com$/i'],
             'student_number' => 'nullable|string|max:50|unique:users,student_number',
             'name' => 'nullable|string|max:100',
             'password' => 'required|min:8|confirmed',

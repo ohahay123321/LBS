@@ -2,26 +2,33 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements AuthenticatableContract
+class User extends Authenticatable
 {
-    use Authenticatable, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'name', 'student_number', 'email', 'password', 'role', 'phone', 'address', 'profile_image', 'email_verified',
-        'verification_token', 'reset_token', 'reset_expires',
+        'verification_token', 'reset_token', 'reset_expires', 'google2fa_secret', 'google2fa_enabled',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'google2fa_secret',
+        'reset_token',
+        'verification_token',
     ];
 
     protected $casts = [
         'email_verified' => 'boolean',
+        'google2fa_enabled' => 'boolean',
     ];
 
-    public function getProfileImageUrlAttribute()
+    public function getProfileImageUrlAttribute(): string
     {
         if ($this->profile_image && ! in_array($this->profile_image, ['default.png', 'imagess.png'])) {
             return asset('storage/'.$this->profile_image);

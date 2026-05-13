@@ -9,9 +9,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::orderBy('name')->get();
-
-        return view('admin.dashboard', compact('categories'));
+        return redirect()->route('admin.dashboard');
     }
 
     public function store(Request $request)

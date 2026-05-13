@@ -65,9 +65,9 @@ class BookController extends Controller
     private function buildActionColumn($book)
     {
         $csrf = csrf_token();
-        $title = addslashes($book->title);
-        $author = addslashes($book->author ?? '');
-        $category = addslashes($book->category);
+        $title = safe_addslashes($book->title);
+        $author = safe_addslashes($book->author ?? '');
+        $category = safe_addslashes($book->category);
 
         $editBtn = '<button onclick="editBook(' . $book->id . ', \'' . $title . '\', \'' . $author . '\', \'' . $category . '\', ' . ($book->stock ?? 1) . ')" class="btn-info btn-sm" style="margin-right: 8px;">Edit</button>';
 
@@ -85,9 +85,7 @@ class BookController extends Controller
 
     public function index()
     {
-        $books = Book::orderBy('id', 'desc')->get();
-
-        return view('admin.dashboard', compact('books'));
+        return redirect()->route('admin.dashboard');
     }
 
     public function store(StoreBookRequest $request)
@@ -100,7 +98,7 @@ class BookController extends Controller
         }
 
         Book::create([
-            'id' => $request->isbn,
+            'isbn' => $request->isbn,
             'title' => $request->title,
             'author' => $request->author,
             'stock' => $request->stock,

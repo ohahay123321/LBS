@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Config;
 use App\Models\Log;
 use App\Models\User;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -110,7 +111,7 @@ class AdminController extends Controller
         $admin = Auth::guard('admin')->user();
 
         if ($admin->profile_image && ! in_array($admin->profile_image, ['default.png', 'imagess.png'])) {
-            Storage::disk('public')->delete('profile_images/'.$admin->profile_image);
+            Storage::disk('public')->delete($admin->profile_image);
         }
 
         $path = $request->file('profile_image')->store('profile_images', 'public');

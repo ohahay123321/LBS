@@ -10,7 +10,7 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'category', 'status', 'image', 'stock', 'author',
+        'isbn', 'title', 'category', 'status', 'image', 'stock', 'author',
     ];
 
     protected $casts = [

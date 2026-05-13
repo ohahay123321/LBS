@@ -57,10 +57,20 @@ class RequestController extends Controller
     public function returnBook($reqId)
     {
         $request = BookRequest::with('book')->findOrFail($reqId);
+
+        // Calculate fine: days overdue × fine rate per day
+        $fine = 0;
+        if ($request->return_date && now()->gt($request->return_date)) {
+            $daysLate = (int) now()->diffInDays($request->return_date);
+            $fineRate = \App\Models\Config::get('fine_rate', 10);
+            $fine = $daysLate * $fineRate;
+        }
+
         $request->update([
             'status' => 'RETURNED',
             'action_date' => now(),
             'approved_by' => Auth::guard('admin')->id(),
+            'fine' => $fine,
         ]);
         Book::where('id', $request->book_id)->update(['status' => 'AVAILABLE']);
 
